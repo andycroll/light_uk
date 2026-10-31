@@ -16,6 +16,7 @@ jobs:
           ruby-version: '4.0'
           bundler-cache: true
       - run: bundle exec rake test
+
       # A new gem's first release must name the RubyGems account that will own it
       - name: Get a RubyGems key through trusted publishing
         env:
