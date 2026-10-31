@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [1.0.0] - 2026-10-31
 
 ### Added
 - `LightUk::Cinema.all` and `LightUk::Cinema.new(id)` for Light's cinemas, from the venue list on every venue's home page, with addresses and postcodes from each venue's page footer.
