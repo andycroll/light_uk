@@ -33,7 +33,6 @@ module LightUk
         IMAX = /\bIMAX\b/i
 
         LANGUAGE = /\((#{Cinebase::TitleSanitizer::LANGUAGES.join('|')})\)/i
-        TIME_ZONE = "Europe/London"
 
         # @param [Hash] session one session
         # @param [Hash] film the film the session shows
@@ -78,7 +77,7 @@ module LightUk
             year, month, day = @date.fetch("Key").unpack("a4a2a2").map(&:to_i)
             hour, minute = @session.fetch("Display").scan(/\d+/).map(&:to_i)
             local = Time.utc(year, month, day, hour, minute)
-            TZInfo::Timezone.get(TIME_ZONE).local_to_utc(local) { |periods| periods.first }.utc
+            Cinebase::London.utc(local)
           end
         end
 

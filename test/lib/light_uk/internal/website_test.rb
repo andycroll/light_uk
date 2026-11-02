@@ -41,12 +41,20 @@ class LightUk::Internal::WebsiteTest < Minitest::Test
     assert_equal [20293, 19685, 19363, 20445, 20243], website.coming_soon(CAMBRIDGE).map { |film| film['ID'] }
   end
 
+  def test_retries_dropped_connections
+    stub_request(:get, CAMBRIDGE).to_raise(Errno::ECONNRESET).then.to_return(status: 200, body: home_html('3'))
+
+    address = Cinebase::Http.stub(:pause, nil) { website.address(CAMBRIDGE) }
+
+    assert_equal 'Cambridge Leisure Park, Clifton Way, Cambridge, CB1 7DY', address
+  end
+
   def test_errors_omit_body
     stub_request(:get, CAMBRIDGE).to_return(status: 500, body: 'secret')
 
     error = assert_raises(RuntimeError) { website.address(CAMBRIDGE) }
 
-    assert_equal 'Light HTTP error 500', error.message
+    assert_equal 'HTTP error 500 from cambridge.thelight.co.uk', error.message
   end
 
   private

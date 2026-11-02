@@ -5,7 +5,6 @@ require 'cinebase'
 
 require_relative './light_uk/version'
 
-require_relative './light_uk/internal/http'
 require_relative './light_uk/internal/website'
 require_relative './light_uk/internal/title_sanitizer'
 
