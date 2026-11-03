@@ -73,7 +73,9 @@ class LightUk::PerformanceTest < Minitest::Test
   def test_at_adds_coming_soon_beyond_the_guide
     performances = with_fake_website { LightUk::Performance.at(3, from: DATE, to: DATE + 365) }
 
-    assert_includes performances.map(&:film_name), 'National Theatre Live: Hay Fever'
+    hay_fever = performances.find { |p| p.film_name == 'Hay Fever' }
+
+    assert_equal Cinebase::Event.new(name: 'National Theatre Live'), hay_fever.event
     assert_equal Time.utc(2027, 4, 1, 18), performances.last.starting_at
   end
 
@@ -83,7 +85,7 @@ class LightUk::PerformanceTest < Minitest::Test
 
     assert_equal booking_urls.uniq, booking_urls
     assert_equal 12, performances.count { |p| p.film_name == 'Ramayana: Rise of a Legend' }
-    assert_equal 4, performances.count { |p| p.film_name == 'National Theatre Live: Golden Boy' }
+    assert_equal 4, performances.count { |p| p.film_name == 'Golden Boy' }
   end
 
   def test_at_makes_two_requests_for_every_date
