@@ -10,6 +10,7 @@ class LightUk::Internal::Parser::SessionTest < Minitest::Test
       film_year: 1996,
       language: nil,
       starting_at: Time.utc(2026, 7, 24, 17, 15),
+      title: 'From Dusk Till Dawn (1996)',
       variant: []
     }
 
@@ -40,6 +41,14 @@ class LightUk::Internal::Parser::SessionTest < Minitest::Test
   def test_unescapes_title
     assert_equal 'Stray Kids World Tour <RUN IT> Live Viewing',
                  parse(title: 'Stray Kids World Tour &lt;RUN IT&gt; Live Viewing')[:film_name]
+  end
+
+  def test_performances_read_variants_from_the_raw_title
+    hash = parse(title: 'Relaxed Screening: Wicker')
+    performance = LightUk::Performance.new(hash.merge(cinema_id: '3', cinema_name: 'Cambridge'))
+
+    assert_equal 'Wicker', performance.film_name
+    assert_equal %w(relaxed), performance.variant
   end
 
   def test_session_that_has_started
